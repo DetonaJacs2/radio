@@ -373,7 +373,43 @@ if ("serviceWorker" in navigator) {
 }
 </script>
 
+  <script>
+let deferredPrompt;
+
+window.addEventListener("beforeinstallprompt", (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+
+  const btn = document.createElement("button");
+  btn.innerText = "📲 Instalar App";
+  btn.style.cssText = `
+    position:fixed;
+    bottom:20px;
+    right:20px;
+    padding:14px 18px;
+    border-radius:16px;
+    border:none;
+    background:#1c3;
+    color:#002b14;
+    font-weight:600;
+    cursor:pointer;
+    box-shadow:0 10px 30px rgba(0,0,0,.4);
+    z-index:9999;
+  `;
+
+  btn.onclick = async () => {
+    btn.remove();
+    deferredPrompt.prompt();
+    await deferredPrompt.userChoice;
+    deferredPrompt = null;
+  };
+
+  document.body.appendChild(btn);
+});
+</script>
+
 
 </body>
 </html>
+
 
