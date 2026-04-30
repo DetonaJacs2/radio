@@ -275,8 +275,7 @@ body{
 
 <div class="search-box">
   <input type="text" id="search" placeholder="Buscar música..." />
-  <button onclick="searchMusic()">🔍</button>
-</div>
+<button onclick="userStart()">🔍</button></div>
 
 <div id="results" style="margin-top:10px;"></div>
 
@@ -534,21 +533,11 @@ function playYT(videoId, title){
 
   if(ytPlayer){
 
-    ytPlayer.loadVideoById(videoId);
-
-    // força play após clique real
-    setTimeout(() => {
-      ytPlayer.playVideo();
-    }, 500);
-
-    // fallback (caso bloqueie)
-    setTimeout(() => {
-      if(ytPlayer.getPlayerState() !== 1){
-        ytPlayer.mute();
-        ytPlayer.playVideo();
-        ytPlayer.unMute();
-      }
-    }, 1200);
+    ytPlayer.loadVideoById({
+      videoId: videoId,
+      startSeconds: 0,
+      suggestedQuality: "large"
+    });
 
     display.innerText = title;
     setLive(true);
@@ -567,8 +556,11 @@ let ytPlayer;
 function onYouTubeIframeAPIReady() {
   const container = document.createElement("div");
   container.id = "ytPlayer";
-container.style.pointerEvents = "none";
-container.style.opacity = "0";
+container.style.height = "200px";
+container.style.width = "360px";
+container.style.marginTop = "10px";
+container.style.borderRadius = "12px";
+container.style.overflow = "hidden";
   document.body.appendChild(container);
 
   ytPlayer = new YT.Player("ytPlayer", {
@@ -582,7 +574,18 @@ width: "100%",
 }
 </script>
 
+<script>
+function userStart(){
+  if(audioCtx && audioCtx.state === "suspended"){
+    audioCtx.resume();
+  }
+  searchMusic();
+}
+</script>
+
+
 </body>
 </html>
+
 
 
