@@ -218,6 +218,11 @@ footer{
     <footer>Minimal • Estável • Moderno</footer>
 </div>
 
+<input type="text" id="search" placeholder="Buscar música..." />
+<button onclick="searchMusic()">🔍</button>
+
+<div id="results" style="margin-top:10px;"></div>
+
 <script>
 const stations = [
  {name:"Alvorada", url:"https://29321.live.streamtheworld.com/RADIO_ALVORADA.mp3"},
@@ -408,6 +413,60 @@ window.addEventListener("beforeinstallprompt", (e) => {
 });
 </script>
 
+<script>
+
+const API_KEY = "AIzaSyD8pRgLjbZXBWdmzJjBaKagOutXx1iuOW4";
+
+async function searchMusic(){
+  const query = document.getElementById("search").value;
+
+  const res = await fetch(
+    `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${query}&type=video&maxResults=6&key=${API_KEY}`
+  );
+
+  const data = await res.json();
+  const resultsDiv = document.getElementById("results");
+
+  resultsDiv.innerHTML = "";
+
+  data.items.forEach(item => {
+    const videoId = item.id.videoId;
+    const title = item.snippet.title;
+    const thumb = item.snippet.thumbnails.medium.url;
+
+    const card = document.createElement("div");
+    card.style = `
+      display:flex;
+      gap:10px;
+      margin:10px 0;
+      cursor:pointer;
+      align-items:center;
+      background:#1a1a1a;
+      padding:8px;
+      border-radius:10px;
+    `;
+
+    card.onclick = () => playYT(videoId, title);
+
+    card.innerHTML = `
+      <img src="${thumb}" width="80" style="border-radius:8px">
+      <span style="font-size:13px">${title}</span>
+    `;
+
+    resultsDiv.appendChild(card);
+  });
+}
+</script>
+
+<script>
+function playYT(videoId, title){
+  if(ytPlayer){
+    ytPlayer.loadVideoById(videoId);
+    display.innerText = title;
+    setLive(true);
+  }
+}
+</script>
 
 </body>
 </html>
