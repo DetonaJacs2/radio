@@ -172,6 +172,31 @@ footer{
     color:#777;
     margin-top:14px;
 }
+
+.search-box{
+    display:flex;
+    gap:8px;
+    margin-top:20px;
+}
+
+.search-box input{
+    flex:1;
+    padding:10px;
+    border-radius:10px;
+    border:none;
+    background:#2a2a2a;
+    color:#fff;
+}
+
+.search-box button{
+    padding:10px 14px;
+    border:none;
+    border-radius:10px;
+    background:#1c3;
+    color:#002b14;
+    font-weight:bold;
+    cursor:pointer;
+}
 </style>
 </head>
 
@@ -220,10 +245,14 @@ footer{
     <footer>Minimal • Estável • Moderno</footer>
 </div>
 
-<input type="text" id="search" placeholder="Buscar música..." />
-<button onclick="searchMusic()">🔍</button>
+<div class="search-box">
+  <input type="text" id="search" placeholder="Buscar música..." />
+  <button onclick="searchMusic()">🔍</button>
+</div>
 
 <div id="results" style="margin-top:10px;"></div>
+
+<img id="cover" style="width:100%;border-radius:12px;margin-top:10px;display:none;">
 
 <script>
 const stations = [
@@ -437,16 +466,17 @@ async function searchMusic(){
     const thumb = item.snippet.thumbnails.medium.url;
 
     const card = document.createElement("div");
-    card.style = `
-      display:flex;
-      gap:10px;
-      margin:10px 0;
-      cursor:pointer;
-      align-items:center;
-      background:#1a1a1a;
-      padding:8px;
-      border-radius:10px;
-    `;
+	card.style = `
+  display:flex;
+  gap:10px;
+  margin:10px 0;
+  cursor:pointer;
+  align-items:center;
+  background:#1a1a1a;
+  padding:10px;
+  border-radius:12px;
+  transition:.2s;
+`;
 
     card.onclick = () => playYT(videoId, title);
 
@@ -454,6 +484,8 @@ async function searchMusic(){
       <img src="${thumb}" width="80" style="border-radius:8px">
       <span style="font-size:13px">${title}</span>
     `;
+card.onmouseover = () => card.style.background = "#2a2a2a";
+card.onmouseout = () => card.style.background = "#1a1a1a";
 
     resultsDiv.appendChild(card);
   });
@@ -468,7 +500,6 @@ function playYT(videoId, title){
   if(ytPlayer){
     ytPlayer.loadVideoById(videoId);
 
-    // força play após interação
     setTimeout(() => {
       ytPlayer.playVideo();
     }, 300);
@@ -476,6 +507,11 @@ function playYT(videoId, title){
     display.innerText = title;
     setLive(true);
   }
+
+  // ✅ AGORA SIM no lugar certo
+  const cover = document.getElementById("cover");
+  cover.src = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+  cover.style.display = "block";
 }
 </script>
 
