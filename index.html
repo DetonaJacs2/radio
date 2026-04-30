@@ -197,6 +197,26 @@ footer{
     font-weight:bold;
     cursor:pointer;
 }
+
+body{
+    flex-direction:column;
+    gap:10px;
+}
+
+#results{
+    width:360px;
+    max-height:200px;
+    overflow-y:auto;
+}
+
+#results::-webkit-scrollbar{
+    width:6px;
+}
+
+#results::-webkit-scrollbar-thumb{
+    background:#444;
+    border-radius:10px;
+}
 </style>
 </head>
 
@@ -252,8 +272,15 @@ footer{
 
 <div id="results" style="margin-top:10px;"></div>
 
-<img id="cover" style="width:100%;border-radius:12px;margin-top:10px;display:none;">
-
+<img id="cover" style="
+width:360px;
+height:200px;
+object-fit:cover;
+border-radius:16px;
+margin-top:10px;
+display:none;
+box-shadow:0 10px 30px rgba(0,0,0,.5);
+">
 <script>
 const stations = [
  {name:"Alvorada", url:"https://29321.live.streamtheworld.com/RADIO_ALVORADA.mp3"},
@@ -522,19 +549,16 @@ let ytPlayer;
 function onYouTubeIframeAPIReady() {
   const container = document.createElement("div");
   container.id = "ytPlayer";
+  container.style.position = "absolute";
+  container.style.opacity = "0"; // invisível mas funcional
   document.body.appendChild(container);
 
   ytPlayer = new YT.Player("ytPlayer", {
-    height: "0",
-    width: "0",
+    height: "1",
+    width: "1",
     playerVars: {
       autoplay: 0,
       controls: 0
-    },
-    events: {
-      onReady: () => {
-        console.log("YT pronto");
-      }
     }
   });
 }
