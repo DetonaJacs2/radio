@@ -463,11 +463,16 @@ async function searchMusic(){
 <script>
 function playYT(videoId, title){
 
-  // pausa rádio
-  audio.pause();
+  audio.pause(); // para rádio
 
   if(ytPlayer){
     ytPlayer.loadVideoById(videoId);
+
+    // força play após interação
+    setTimeout(() => {
+      ytPlayer.playVideo();
+    }, 300);
+
     display.innerText = title;
     setLive(true);
   }
