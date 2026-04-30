@@ -462,6 +462,10 @@ async function searchMusic(){
 
 <script>
 function playYT(videoId, title){
+
+  // pausa rádio
+  audio.pause();
+
   if(ytPlayer){
     ytPlayer.loadVideoById(videoId);
     display.innerText = title;
